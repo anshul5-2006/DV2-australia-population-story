@@ -1,0 +1,81 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "width": "container",
+  "height": 380,
+
+  "padding": { "left": 8, "top": 38, "right": 22, "bottom": 14 },
+
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": false
+  },
+
+  "title": {
+    "text": "5. Where Do Migrants Come From? (2024–25)",
+    "fontSize": 16,
+    "fontWeight": "bold",
+    "anchor": "start",
+    "offset": 8,
+    "lineBreak": " ",
+    "limit": 260
+  },
+
+  "data": {
+    "url": "data/migration_origins.csv",
+    "format": { "type": "csv" }
+  },
+
+  "transform": [
+    { "filter": "datum.Period == '2024-25'" },
+    {
+      "filter": "indexof(['India','China','Philippines','Nepal','New Zealand','UK','Sri Lanka','Vietnam','Pakistan','Indonesia'], datum.Country) >= 0"
+    },
+    { "calculate": "toNumber(datum.Migrants)", "as": "Migrants" }
+  ],
+
+  "layer": [
+    {
+      "mark": { "type": "rule", "color": "#c8c8c8", "strokeWidth": 1 },
+      "encoding": {
+        "y": {
+          "field": "Country",
+          "type": "nominal",
+          "title": null,
+          "sort": "-x",
+          "axis": {
+            "labelFontSize": 11,
+            "labelLimit": 100,
+            "labelPadding": 6,
+            "offset": 4
+          }
+        },
+        "x": {
+          "field": "Migrants",
+          "type": "quantitative",
+          "title": "Migrants",
+          "scale": { "nice": true, "zero": true },
+          "axis": { "format": "~s", "labelFontSize": 11, "tickCount": 6 }
+        },
+        "x2": { "value": 0 }
+      }
+    },
+    {
+      "mark": { "type": "point", "filled": true, "color": "#1a365d", "size": 90 },
+      "encoding": {
+        "y": { "field": "Country", "type": "nominal", "sort": "-x" },
+        "x": { "field": "Migrants", "type": "quantitative" },
+        "tooltip": [
+          { "field": "Country", "title": "Country" },
+          { "field": "Migrants", "title": "Migrants", "format": ",.0f" }
+        ]
+      }
+    }
+  ],
+
+  "config": {
+    "view": { "stroke": null },
+    "axis": { "grid": true, "gridOpacity": 0.2 }
+  }
+}

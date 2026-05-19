@@ -1,0 +1,138 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "width": "container",
+  "height": 380,
+
+  "padding": { "left": 10, "top": 38, "right": 72, "bottom": 8 },
+
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": false
+  },
+
+  "title": {
+    "text": [
+      "7. What Type of Migration Shapes",
+      "Australia? (2024–25)"
+    ],
+    "fontSize": 16,
+    "fontWeight": "bold",
+    "anchor": "start",
+    "offset": 8,
+    "lineHeight": 20
+  },
+
+  "data": {
+    "url": "data/migration_program.csv",
+    "format": { "type": "csv" }
+  },
+
+  "transform": [
+    { "filter": "datum.Period == '2024-25'" },
+    {
+      "filter": "indexof(['Skill stream','Family stream','Child stream','Special Eligibility'], datum.Stream) >= 0"
+    },
+    { "calculate": "toNumber(datum.Migrants)", "as": "Migrants" },
+    {
+      "calculate": "datum.Migrants >= 1000 ? format(datum.Migrants / 1000, '.0f') + 'K' : format(datum.Migrants / 1000, '.1f') + 'K'",
+      "as": "LabelK"
+    },
+    {
+      "stack": "zero",
+      "groupby": ["Period"],
+      "field": "Migrants",
+      "as": ["y0", "y1"]
+    },
+    {
+      "calculate": "(datum.y0 + datum.y1) / 2",
+      "as": "yMid"
+    }
+  ],
+
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "size": 58,
+        "stroke": "#ffffff",
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "x": {
+          "field": "Period",
+          "type": "nominal",
+          "title": null,
+          "axis": { "labels": false, "ticks": false }
+        },
+        "y": {
+          "field": "Migrants",
+          "type": "quantitative",
+          "title": null,
+          "stack": "zero",
+          "axis": {
+            "format": "~s",
+            "labelFontSize": 11,
+            "tickCount": 5
+          }
+        },
+        "color": {
+          "field": "Stream",
+          "type": "nominal",
+          "title": null,
+          "scale": {
+            "domain": [
+              "Skill stream",
+              "Family stream",
+              "Child stream",
+              "Special Eligibility"
+            ],
+            "range": ["#1a365d", "#3d7ab8", "#7eb3e8", "#c5dff5"]
+          },
+          "legend": {
+            "orient": "right",
+            "offset": 0,
+            "labelFontSize": 9,
+            "symbolSize": 65,
+            "columns": 1,
+            "title": null,
+            "labelLimit": 90
+          }
+        },
+        "order": {
+          "field": "Stream",
+          "sort": [
+            "Skill stream",
+            "Family stream",
+            "Child stream",
+            "Special Eligibility"
+          ]
+        },
+        "tooltip": [
+          { "field": "Stream", "title": "Stream" },
+          { "field": "Migrants", "title": "Migrants", "format": ",.0f" }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "fill": "#ffffff",
+        "fontSize": 10,
+        "fontWeight": "bold",
+        "font": "Georgia, serif"
+      },
+      "encoding": {
+        "x": { "field": "Period", "type": "nominal" },
+        "y": { "field": "yMid", "type": "quantitative" },
+        "text": { "field": "LabelK" }
+      }
+    }
+  ],
+
+  "config": {
+    "view": { "stroke": null },
+    "axis": { "grid": true, "gridOpacity": 0.15 }
+  }
+}

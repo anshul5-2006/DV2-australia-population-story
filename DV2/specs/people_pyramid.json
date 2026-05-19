@@ -1,0 +1,98 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "width": "container",
+  "height": 380,
+
+  "padding": { "left": 8, "top": 38, "right": 8, "bottom": 10 },
+
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": false
+  },
+
+  "title": {
+    "text": "8. Australia’s Age Structure (2025)",
+    "fontSize": 16,
+    "fontWeight": "bold",
+    "anchor": "start",
+    "offset": 8,
+    "lineBreak": " ",
+    "limit": 260
+  },
+
+  "data": {
+    "url": "data/age_demographics.csv",
+    "format": { "type": "csv" }
+  },
+
+  "transform": [
+    { "calculate": "toNumber(datum.Population)", "as": "Population" },
+    {
+      "calculate": "datum.Gender == 'Male' ? -datum.Population : datum.Population",
+      "as": "PopSigned"
+    }
+  ],
+
+  "mark": { "type": "bar", "size": 14 },
+
+  "encoding": {
+    "y": {
+      "field": "AgeGroup",
+      "type": "ordinal",
+      "title": null,
+      "sort": ["0-14", "15-29", "30-44", "45-59", "60-74", "75-89", "90+"],
+      "axis": {
+        "labelFontSize": 10,
+        "labelPadding": 6,
+        "labelColor": "#333333",
+        "orient": "right",
+        "ticks": false
+      }
+    },
+    "x": {
+      "field": "PopSigned",
+      "type": "quantitative",
+      "title": "Population (millions)",
+      "axis": {
+        "labelExpr": "abs(datum.value) >= 1e6 ? format(abs(datum.value)/1e6, '.1f') + 'M' : format(abs(datum.value)/1e3, '.0f') + 'k'",
+        "labelFontSize": 10,
+        "labelColor": "#333333",
+        "titleColor": "#333333",
+        "values": [-2000000, -1000000, 0, 1000000, 2000000],
+        "grid": true
+      },
+      "scale": { "nice": false }
+    },
+    "color": {
+      "field": "Gender",
+      "type": "nominal",
+      "legend": {
+        "orient": "top",
+        "title": null,
+        "labelFontSize": 10,
+        "labelColor": "#333333",
+        "symbolSize": 80
+      },
+      "scale": {
+        "domain": ["Male", "Female"],
+        "range": ["#5a9fd4", "#d89aad"]
+      }
+    },
+    "tooltip": [
+      { "field": "AgeGroup", "title": "Age group" },
+      { "field": "Gender", "title": "Gender" },
+      { "field": "Population", "title": "Population", "format": ",.0f" }
+    ]
+  },
+
+  "config": {
+    "view": { "stroke": null },
+    "axis": {
+      "labelColor": "#333333",
+      "titleColor": "#333333",
+      "gridOpacity": 0.14
+    }
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "width": "container",
+  "height": 380,
+
+  "padding": { "left": 18, "top": 38, "right": 20, "bottom": 10 },
+
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": false
+  },
+
+  "title": {
+    "text": [
+      "9. Are Capital Cities Growing Faster",
+      "Than Regional Areas? (2014 vs 2025)"
+    ],
+    "fontSize": 16,
+    "fontWeight": "bold",
+    "anchor": "start",
+    "offset": 8,
+    "lineHeight": 20
+  },
+
+  "data": {
+    "url": "data/regional_population.csv",
+    "format": { "type": "csv" }
+  },
+
+  "transform": [
+    { "calculate": "toNumber(datum.Pop2014)", "as": "Pop2014" },
+    { "calculate": "toNumber(datum.Pop2025)", "as": "Pop2025" },
+    {
+      "calculate": "datum.Region == 'Greater Sydney' ? 'Sydney' : datum.Region == 'Rest of NSW' ? 'Regional NSW' : datum.Region == 'Greater Melbourne' ? 'Melbourne' : 'Regional VIC'",
+      "as": "RegionLabel"
+    }
+  ],
+
+  "encoding": {
+    "y": {
+      "field": "RegionLabel",
+      "type": "nominal",
+      "title": null,
+      "sort": ["Sydney", "Regional NSW", "Melbourne", "Regional VIC"],
+      "axis": {
+        "labelFontSize": 10,
+        "labelColor": "#333333",
+        "labelPadding": 10,
+        "offset": 10
+      }
+    },
+    "x": {
+      "type": "quantitative",
+      "title": "Population (millions)",
+      "scale": {
+        "domain": [1320000, 5480000],
+        "nice": false,
+        "padding": 0.04
+      },
+      "axis": {
+        "labelExpr": "datum.value >= 1e6 ? format(datum.value/1e6, '.0f') + 'M' : format(datum.value/1e3, '.0f') + 'k'",
+        "labelFontSize": 10,
+        "labelColor": "#333333",
+        "titleColor": "#333333",
+        "tickCount": 5
+      }
+    }
+  },
+
+  "layer": [
+    {
+      "mark": { "type": "rule", "color": "#5f5f5f", "strokeWidth": 1.25 },
+      "encoding": {
+        "x": { "field": "Pop2014" },
+        "x2": { "field": "Pop2025" }
+      }
+    },
+    {
+      "transform": [
+        { "fold": ["Pop2014", "Pop2025"] },
+        {
+          "calculate": "datum.key == 'Pop2014' ? '2014' : '2025'",
+          "as": "Year"
+        },
+        { "calculate": "toNumber(datum.value)", "as": "Population" }
+      ],
+      "mark": {
+        "type": "point",
+        "stroke": "#2b6cb0",
+        "strokeWidth": 1.5,
+        "size": 100,
+        "filled": {
+          "condition": { "test": "datum.Year == '2025'", "value": true },
+          "value": false
+        }
+      },
+      "encoding": {
+        "x": { "field": "Population" },
+        "color": {
+          "field": "Year",
+          "type": "nominal",
+          "legend": {
+            "orient": "top-right",
+            "direction": "horizontal",
+            "title": null,
+            "labelFontSize": 9,
+            "symbolSize": 48,
+            "symbolStrokeWidth": 1.5,
+            "offset": -10,
+            "padding": 4,
+            "columnPadding": 10
+          },
+          "scale": {
+            "domain": ["2014", "2025"],
+            "range": ["#fafafa", "#2b6cb0"]
+          }
+        },
+        "tooltip": [
+          { "field": "Region", "title": "Region" },
+          { "field": "Year", "title": "Year" },
+          { "field": "Population", "title": "Population", "format": ",.0f" }
+        ]
+      }
+    }
+  ],
+
+  "config": {
+    "view": { "stroke": null },
+    "axis": {
+      "labelColor": "#333333",
+      "titleColor": "#333333",
+      "grid": true,
+      "gridOpacity": 0.15
+    },
+    "legend": {
+      "orient": "top-right",
+      "direction": "horizontal"
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "width": "container",
+  "height": 400,
+
+  "padding": { "left": 8, "top": 38, "right": 20, "bottom": 8 },
+
+  "autosize": {
+    "type": "pad",
+    "contains": "padding",
+    "resize": false
+  },
+
+  "title": {
+    "text": "2. Largest States by Population (Latest)",
+    "fontSize": 16,
+    "fontWeight": "bold",
+    "anchor": "start",
+    "offset": 8,
+    "lineBreak": " ",
+    "limit": 260
+  },
+
+  "data": {
+    "url": "data/ab.csv",
+    "format": { "type": "csv" }
+  },
+
+  "transform": [
+    { "filter": "datum.Quarter == '2025-Q3'" },
+    { "calculate": "toNumber(datum.TotalPopulation)", "as": "Population" }
+  ],
+
+  "mark": {
+    "type": "bar",
+    "cornerRadiusEnd": 3,
+    "color": "#2b6cb0"
+  },
+
+  "encoding": {
+    "y": {
+      "field": "State",
+      "type": "nominal",
+      "title": null,
+      "sort": "-x",
+      "axis": {
+        "labelFontSize": 12,
+        "labelLimit": 150
+      }
+    },
+    "x": {
+      "field": "Population",
+      "type": "quantitative",
+      "title": "Population",
+      "scale": { "nice": true, "zero": true },
+      "axis": {
+        "format": "~s",
+        "labelFontSize": 12,
+        "tickCount": 6
+      }
+    },
+    "tooltip": [
+      { "field": "State", "title": "State" },
+      { "field": "Population", "title": "Population", "format": ",.0f" }
+    ]
+  }
+}

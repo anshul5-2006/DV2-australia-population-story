@@ -1,0 +1,157 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "width": "container",
+  "height": 380,
+
+  "padding": { "left": 4, "top": 38, "right": 52, "bottom": 10 },
+
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": false
+  },
+
+  "title": {
+    "text": [
+      "10. Interstate Migration — Winners",
+      "& Losers (2024–25)"
+    ],
+    "fontSize": 16,
+    "fontWeight": "bold",
+    "anchor": "start",
+    "offset": 8,
+    "lineHeight": 20
+  },
+
+  "data": {
+    "url": "data/ab.csv",
+    "format": { "type": "csv" }
+  },
+
+  "transform": [
+    {
+      "filter": "indexof(['Queensland','Western Australia','South Australia','New South Wales','Victoria','Australian Capital Territory'], datum.State) >= 0"
+    },
+    {
+      "filter": "indexof(['2024-Q3','2024-Q4','2025-Q1','2025-Q2','2025-Q3'], datum.Quarter) >= 0"
+    },
+    { "calculate": "toNumber(datum.NetInterstateMigration)", "as": "Migration" },
+    {
+      "aggregate": [{ "op": "sum", "field": "Migration", "as": "Migration" }],
+      "groupby": ["State"]
+    },
+    {
+      "calculate": "datum.State == 'Australian Capital Territory' ? 'ACT' : datum.State == 'New South Wales' ? 'NSW' : datum.State == 'South Australia' ? 'SA' : datum.State == 'Victoria' ? 'VIC' : datum.State == 'Western Australia' ? 'WA' : datum.State == 'Queensland' ? 'QLD' : datum.State",
+      "as": "StateShort"
+    },
+    {
+      "calculate": "(datum.Migration < 0 ? '' : '+') + format(datum.Migration/1000, '.1f') + 'K'",
+      "as": "Label"
+    },
+    {
+      "calculate": "datum.Migration >= 0 ? 'gain' : 'loss'",
+      "as": "Direction"
+    },
+    { "calculate": "abs(datum.Migration)", "as": "AbsMigration" },
+    {
+      "window": [{ "op": "rank", "as": "Rank" }],
+      "sort": [{ "field": "AbsMigration", "order": "descending" }]
+    }
+  ],
+
+  "encoding": {
+    "y": {
+      "field": "StateShort",
+      "type": "nominal",
+      "title": null,
+      "sort": { "field": "Rank", "order": "ascending" },
+      "axis": {
+        "labelFontSize": 10,
+        "labelColor": "#333333",
+        "labelPadding": 4,
+        "offset": 8,
+        "labelAlign": "right",
+        "labelBound": true
+      }
+    },
+    "x": {
+      "field": "Migration",
+      "type": "quantitative",
+      "title": "Net interstate migration",
+      "scale": {
+        "domain": [-30000, 30000],
+        "nice": false,
+        "zero": true
+      },
+      "axis": {
+        "labelExpr": "format(datum.value/1000, '.0f') + 'K'",
+        "labelFontSize": 10,
+        "labelColor": "#333333",
+        "titleColor": "#333333",
+        "values": [-30000, -20000, -10000, 0, 10000, 20000]
+      }
+    },
+    "color": {
+      "field": "Direction",
+      "type": "nominal",
+      "legend": null,
+      "scale": {
+        "domain": ["gain", "loss"],
+        "range": ["#4f7d5c", "#b04e4e"]
+      }
+    },
+    "tooltip": [
+      { "field": "State", "title": "State" },
+      { "field": "Migration", "title": "Migration", "format": "+,.0f" }
+    ]
+  },
+
+  "layer": [
+    {
+      "mark": { "type": "bar", "size": 16, "cornerRadiusEnd": 2 }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "fontSize": 10,
+        "font": "Georgia, serif",
+        "color": "#2a2a2a",
+        "align": "left",
+        "dx": 10,
+        "baseline": "middle"
+      },
+      "encoding": {
+        "text": { "field": "Label" },
+        "x": { "field": "Migration" }
+      },
+      "transform": [{ "filter": "datum.Migration >= 0" }]
+    },
+    {
+      "mark": {
+        "type": "text",
+        "fontSize": 10,
+        "font": "Georgia, serif",
+        "color": "#2a2a2a",
+        "align": "left",
+        "dx": 12,
+        "baseline": "middle"
+      },
+      "encoding": {
+        "text": { "field": "Label" },
+        "x": { "field": "Migration" }
+      },
+      "transform": [{ "filter": "datum.Migration < 0" }]
+    }
+  ],
+
+  "config": {
+    "view": { "stroke": null },
+    "axis": {
+      "labelColor": "#333333",
+      "titleColor": "#333333",
+      "grid": true,
+      "gridOpacity": 0.15
+    }
+  }
+}

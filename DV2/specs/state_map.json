@@ -1,0 +1,88 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "width": "container",
+  "height": 400,
+
+  "padding": { "left": 8, "top": 38, "right": 8, "bottom": 52 },
+
+  "autosize": {
+    "type": "pad",
+    "contains": "padding",
+    "resize": false
+  },
+
+  "title": {
+    "text": "1. Population by State (Map)",
+    "fontSize": 16,
+    "fontWeight": "bold",
+    "anchor": "start",
+    "offset": 8,
+    "lineBreak": " ",
+    "limit": 260
+  },
+
+  "data": {
+    "url": "data/australia_states.geojson",
+    "format": {
+      "type": "json",
+      "property": "features"
+    }
+  },
+
+  "transform": [
+    {
+      "lookup": "properties.STATE_NAME",
+      "from": {
+        "data": {
+          "url": "data/ab.csv",
+          "format": { "type": "csv" },
+          "transform": [
+            { "filter": "datum.Quarter == '2025-Q3'" }
+          ]
+        },
+        "key": "State",
+        "fields": ["TotalPopulation"]
+      }
+    },
+    {
+      "calculate": "toNumber(datum.TotalPopulation)",
+      "as": "Population"
+    }
+  ],
+
+  "mark": {
+    "type": "geoshape",
+    "stroke": "#ffffff",
+    "strokeWidth": 1
+  },
+
+  "encoding": {
+    "color": {
+      "field": "Population",
+      "type": "quantitative",
+      "title": "Population",
+      "scale": {
+        "scheme": "blues"
+      },
+      "legend": {
+        "orient": "bottom",
+        "direction": "horizontal",
+        "gradientLength": 200,
+        "title": "Population",
+        "format": ",.0f",
+        "offset": 6
+      }
+    },
+    "tooltip": [
+      { "field": "properties.STATE_NAME", "title": "State" },
+      { "field": "Population", "title": "Population", "format": ",.0f" }
+    ]
+  },
+
+  "projection": {
+    "type": "mercator",
+    "center": [134, -28],
+    "scale": 780
+  }
+}

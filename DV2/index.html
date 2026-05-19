@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Australia’s Population is Changing</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="header-meta">
+            <p><span class="meta-label">Name:</span> Anshul</p>
+            <p><span class="meta-label">Student ID:</span> 35134488</p>
+            <p><span class="meta-label">Date:</span> May 2026</p>
+        </div>
+        <div class="header-main">
+            <h1>How Australia’s Population is Changing</h1>
+            <p class="subtitle">Growth, Migration &amp; Regional Shifts</p>
+        </div>
+    </header>
+
+    <div class="site-nav-sticky">
+        <nav class="site-nav" aria-label="Story sections">
+            <a href="#overview">Overview</a>
+            <a href="#growth">Growth</a>
+            <a href="#migration">Migration</a>
+            <a href="#people">People</a>
+            <a href="#takeaways">Key Takeaways</a>
+        </nav>
+    </div>
+
+    <p class="story-intro">
+        A visual story of where we live, who is arriving, how we are growing,
+        and what the future looks like.
+    </p>
+
+    <div class="story-section-wrap">
+        <aside class="section-rail" aria-label="Section 1: Geographic Overview">
+            <p class="section-rail__label">
+                <span class="section-rail__num">Section 1</span>
+                <span class="section-rail__rule" aria-hidden="true"></span>
+                <span class="section-rail__name">Geographic Overview</span>
+            </p>
+        </aside>
+        <section id="overview" class="story-section story-panel">
+            <h2 class="section-title">Where Australians Live</h2>
+
+            <div class="chart-panel chart-panel--map">
+                <div id="map-vis" class="chart-slot"></div>
+            </div>
+
+            <div class="chart-panel chart-panel--bar">
+                <div id="state-bar-vis" class="chart-slot"></div>
+            </div>
+
+            <aside id="overview-insight" class="insight-card">
+                <h3>Key insight</h3>
+                <p>
+                    NSW and Victoria are home to over half of Australia's population.
+                </p>
+                <span class="insight-sketch-icon" aria-hidden="true">
+                    <i data-lucide="users"></i>
+                </span>
+            </aside>
+        </section>
+    </div>
+
+    <div class="story-section-wrap">
+        <aside class="section-rail" aria-label="Section 2: Growth Story">
+            <p class="section-rail__label">
+                <span class="section-rail__num">Section 2</span>
+                <span class="section-rail__rule" aria-hidden="true"></span>
+                <span class="section-rail__name">Growth Story</span>
+            </p>
+        </aside>
+        <section id="growth" class="story-section story-panel">
+            <h2 class="section-title">How Australia Has Changed</h2>
+
+            <div class="chart-panel chart-panel--line">
+                <div id="line-vis" class="chart-slot"></div>
+            </div>
+
+            <div class="chart-panel chart-panel--area">
+                <div id="area-vis" class="chart-slot"></div>
+            </div>
+
+            <aside id="growth-insight" class="insight-card insight-card--growth">
+                <h3>Key insight</h3>
+                <p>
+                    Overseas migration has become the largest driver of Australia's
+                    population growth.
+                </p>
+                <span class="insight-sketch-icon" aria-hidden="true">
+                    <i data-lucide="trending-up"></i>
+                </span>
+            </aside>
+        </section>
+    </div>
+
+    <div class="story-section-wrap">
+        <aside class="section-rail" aria-label="Section 3: Migration Story">
+            <p class="section-rail__label">
+                <span class="section-rail__num">Section 3</span>
+                <span class="section-rail__rule" aria-hidden="true"></span>
+                <span class="section-rail__name">Migration Story</span>
+            </p>
+        </aside>
+        <section id="migration" class="story-section story-panel">
+            <h2 class="section-title">Who is Shaping Modern Australia?</h2>
+
+            <div class="chart-panel chart-panel--lollipop">
+                <div id="lollipop-vis" class="chart-slot"></div>
+            </div>
+
+            <div class="chart-panel chart-panel--bump">
+                <div id="bump-vis" class="chart-slot"></div>
+            </div>
+
+            <div class="chart-panel chart-panel--program">
+                <div id="program-vis" class="chart-slot"></div>
+            </div>
+
+            <aside id="migration-insight" class="insight-card">
+                <h3>Key insight</h3>
+                <p>
+                    India is now the leading source of migrants, and skilled migration
+                    accounts for most permanent arrivals.
+                </p>
+                <span class="insight-sketch-icon" aria-hidden="true">
+                    <i data-lucide="plane"></i>
+                </span>
+            </aside>
+        </section>
+    </div>
+
+    <div class="story-section-wrap">
+        <aside class="section-rail" aria-label="Section 4: People, Regions & Movement">
+            <p class="section-rail__label">
+                <span class="section-rail__num">Section 4</span>
+                <span class="section-rail__rule" aria-hidden="true"></span>
+                <span class="section-rail__name">People, Regions &amp; Movement</span>
+            </p>
+        </aside>
+        <section id="people" class="story-section story-panel">
+            <h2 class="section-title">Who is Moving, Ageing, and Where?</h2>
+
+            <div class="chart-panel chart-panel--pyramid">
+                <div id="pyramid-vis" class="chart-slot"></div>
+            </div>
+
+            <div class="chart-panel chart-panel--dumbbell">
+                <div id="dumbbell-vis" class="chart-slot"></div>
+            </div>
+
+            <div class="chart-panel chart-panel--interstate">
+                <div id="interstate-vis" class="chart-slot"></div>
+            </div>
+
+            <aside id="people-insight" class="insight-card">
+                <h3>Key insight</h3>
+                <p>
+                    Australia is ageing, people are moving north and west, and cities
+                    continue to grow faster than regions.
+                </p>
+                <span class="insight-sketch-icon insight-sketch-icon--place" aria-hidden="true">
+                    <i data-lucide="home"></i>
+                    <i data-lucide="landmark"></i>
+                    <i data-lucide="trees"></i>
+                </span>
+            </aside>
+        </section>
+    </div>
+
+    <section id="takeaways" class="story-section story-panel">
+        <h2 class="section-title">Key Takeaways</h2>
+        <div class="takeaways-grid" role="list">
+            <article class="takeaways-col" role="listitem">
+                <h3 class="takeaways-col__title">Population</h3>
+                <p>NSW and Victoria remain home to over half of Australia’s population.</p>
+                <p>Queensland and Western Australia show the strongest regional momentum.</p>
+            </article>
+            <article class="takeaways-col" role="listitem">
+                <h3 class="takeaways-col__title">Migration</h3>
+                <p>Overseas migration has become the strongest driver of national growth.</p>
+                <p>India is now Australia’s leading migrant source.</p>
+            </article>
+            <article class="takeaways-col" role="listitem">
+                <h3 class="takeaways-col__title">Movement</h3>
+                <p>Australia is ageing steadily.</p>
+                <p>Interstate migration favours northern and western states.</p>
+            </article>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <p>Data sources: ABS, Department of Home Affairs</p>
+        <p>Author: Anshul (35134488) | May 2026</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            if (typeof lucide === "undefined") return;
+            lucide.createIcons({
+                attrs: {
+                    class: "insight-lucide-svg",
+                    "stroke-width": "1.75",
+                    stroke: "#1a1a1a",
+                    fill: "none",
+                    "aria-hidden": "true"
+                }
+            });
+        });
+    </script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

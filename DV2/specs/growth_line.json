@@ -1,0 +1,107 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "width": "container",
+  "height": 400,
+
+  "padding": { "left": 12, "top": 38, "right": 12, "bottom": 8 },
+
+  "autosize": {
+    "type": "pad",
+    "contains": "padding",
+    "resize": false
+  },
+
+  "title": {
+    "text": "3. State Population Over Time (2014–2025)",
+    "fontSize": 16,
+    "fontWeight": "bold",
+    "anchor": "start",
+    "offset": 8,
+    "lineBreak": " ",
+    "limit": 260
+  },
+
+  "data": {
+    "url": "data/ab.csv",
+    "format": { "type": "csv" }
+  },
+
+  "transform": [
+    {
+      "filter": "indexof(['New South Wales','Victoria','Queensland','Western Australia','South Australia'], datum.State) >= 0"
+    },
+    {
+      "filter": "indexof(['2014-Q1','2016-Q1','2018-Q1','2020-Q1','2022-Q1','2024-Q1','2025-Q1'], datum.Quarter) >= 0"
+    },
+    { "calculate": "toNumber(datum.TotalPopulation)", "as": "Population" },
+    {
+      "calculate": "datum.State == 'New South Wales' ? 'NSW' : datum.State == 'Victoria' ? 'VIC' : datum.State == 'Queensland' ? 'QLD' : datum.State == 'Western Australia' ? 'WA' : 'SA'",
+      "as": "StateAbbr"
+    },
+    { "calculate": "substring(datum.Quarter, 0, 4)", "as": "Year" }
+  ],
+
+  "mark": {
+    "type": "line",
+    "point": { "filled": true, "size": 60 },
+    "strokeWidth": 2.5
+  },
+
+  "encoding": {
+    "x": {
+      "field": "Year",
+      "type": "ordinal",
+      "title": null,
+      "scale": {
+        "domain": ["2014", "2016", "2018", "2020", "2022", "2024", "2025"],
+        "paddingInner": 0,
+        "paddingOuter": 0
+      },
+      "axis": {
+        "labelFontSize": 13,
+        "labelAngle": 0
+      }
+    },
+    "y": {
+      "field": "Population",
+      "type": "quantitative",
+      "title": "Population",
+      "scale": { "domain": [0, 10000000] },
+      "axis": {
+        "format": "~s",
+        "labelFontSize": 13,
+        "tickCount": 6
+      }
+    },
+    "color": {
+      "field": "StateAbbr",
+      "type": "nominal",
+      "title": null,
+      "scale": {
+        "domain": ["NSW", "VIC", "QLD", "WA", "SA"],
+        "range": ["#1a365d", "#2b6cb0", "#3182ce", "#63b3ed", "#90cdf4"]
+      },
+      "legend": {
+        "orient": "top",
+        "direction": "horizontal",
+        "offset": 0,
+        "labelFontSize": 12,
+        "symbolSize": 80,
+        "symbolStrokeWidth": 2
+      }
+    },
+    "opacity": { "value": 1 },
+    "tooltip": [
+      { "field": "State", "title": "State" },
+      { "field": "Year", "title": "Year" },
+      { "field": "Population", "title": "Population", "format": ",.0f" }
+    ]
+  },
+
+  "config": {
+    "mark": {
+      "point": { "size": 60 }
+    }
+  }
+}

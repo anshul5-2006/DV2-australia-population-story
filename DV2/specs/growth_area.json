@@ -1,0 +1,128 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "width": "container",
+  "height": 400,
+
+  "padding": { "left": 56, "top": 38, "right": 12, "bottom": 8 },
+
+  "autosize": {
+    "type": "pad",
+    "contains": "padding",
+    "resize": false
+  },
+
+  "title": {
+    "text": [
+      "4. Components of Population Change (Australia)",
+      "(2014–2025)"
+    ],
+    "fontSize": 16,
+    "fontWeight": "bold",
+    "anchor": "start",
+    "offset": 8,
+    "lineHeight": 20
+  },
+
+  "data": {
+    "url": "data/ab.csv",
+    "format": { "type": "csv" }
+  },
+
+  "transform": [
+    {
+      "filter": "indexof(['2014-Q1','2016-Q1','2018-Q1','2020-Q1','2022-Q1','2024-Q1','2025-Q1'], datum.Quarter) >= 0"
+    },
+    {
+      "fold": [
+        "NaturalIncrease",
+        "NetOverseasMigration",
+        "NetInterstateMigration"
+      ],
+      "as": ["Component", "Value"]
+    },
+    { "calculate": "toNumber(datum.Value)", "as": "Value" },
+    {
+      "calculate": "datum.Component == 'NetInterstateMigration' ? abs(datum.Value) : datum.Value",
+      "as": "Value"
+    },
+    {
+      "calculate": "datum.Component == 'NaturalIncrease' ? 'Natural increase' : datum.Component == 'NetOverseasMigration' ? 'Net overseas migration' : 'Net interstate migration'",
+      "as": "ComponentLabel"
+    },
+    {
+      "aggregate": [{ "op": "sum", "field": "Value", "as": "Total" }],
+      "groupby": ["Quarter", "ComponentLabel"]
+    },
+    { "calculate": "substring(datum.Quarter, 0, 4)", "as": "Year" }
+  ],
+
+  "mark": {
+    "type": "area",
+    "line": { "strokeWidth": 1.5, "color": "#ffffff" },
+    "opacity": 0.92,
+    "interpolate": "monotone"
+  },
+
+  "encoding": {
+    "x": {
+      "field": "Year",
+      "type": "ordinal",
+      "title": null,
+      "scale": {
+        "domain": ["2014", "2016", "2018", "2020", "2022", "2024", "2025"],
+        "paddingInner": 0,
+        "paddingOuter": 0
+      },
+      "axis": { "labelFontSize": 13 }
+    },
+    "y": {
+      "field": "Total",
+      "type": "quantitative",
+      "title": "Population change",
+      "stack": "zero",
+      "axis": {
+        "format": "~s",
+        "labelFontSize": 12,
+        "tickCount": 5
+      }
+    },
+    "color": {
+      "field": "ComponentLabel",
+      "type": "nominal",
+      "title": null,
+      "scale": {
+        "domain": [
+          "Natural increase",
+          "Net overseas migration",
+          "Net interstate migration"
+        ],
+        "range": [
+      "#9CCAF0",
+      "#2F6FB3",
+      "#173A6A"
+    ]
+      },
+      "legend": {
+        "orient": "top",
+        "direction": "horizontal",
+        "labelFontSize": 11,
+        "symbolSize": 100,
+        "columns": 3
+      }
+    },
+    "order": {
+      "field": "ComponentLabel",
+      "sort": [
+        "Natural increase",
+        "Net overseas migration",
+        "Net interstate migration"
+      ]
+    },
+    "tooltip": [
+      { "field": "Year", "title": "Year" },
+      { "field": "ComponentLabel", "title": "Component" },
+      { "field": "Total", "title": "Total", "format": ",.0f" }
+    ]
+  }
+}

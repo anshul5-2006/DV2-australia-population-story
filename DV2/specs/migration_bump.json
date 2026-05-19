@@ -1,0 +1,158 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "width": "container",
+  "height": 400,
+
+  "padding": { "left": 10, "top": 38, "right": 118, "bottom": 28 },
+
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": false
+  },
+
+  "title": {
+    "text": [
+      "6. How Have Migration Sources",
+      "Changed Over Time?"
+    ],
+    "fontSize": 16,
+    "fontWeight": "bold",
+    "anchor": "start",
+    "offset": 8,
+    "lineHeight": 20
+  },
+
+  "data": {
+    "url": "data/migration_origins.csv",
+    "format": { "type": "csv" }
+  },
+
+  "transform": [
+    {
+      "filter": "indexof(['India','China','Philippines','Nepal','New Zealand','UK','Sri Lanka','Vietnam','Pakistan','Indonesia'], datum.Country) >= 0"
+    },
+    {
+      "filter": "indexof(['2014-15','2016-17','2018-19','2020-21','2022-23','2024-25'], datum.Period) >= 0"
+    },
+    { "calculate": "toNumber(datum.Migrants)", "as": "Migrants" },
+    {
+      "window": [{ "op": "rank", "as": "Rank" }],
+      "groupby": ["Period"],
+      "sort": [{ "field": "Migrants", "order": "descending" }]
+    },
+    { "filter": "datum.Rank <= 10" }
+  ],
+
+  "layer": [
+    {
+      "mark": { "type": "line", "strokeWidth": 1.5, "opacity": 0.9 },
+      "encoding": {
+        "x": {
+          "field": "Period",
+          "type": "ordinal",
+          "title": null,
+          "sort": ["2014-15", "2016-17", "2018-19", "2020-21", "2022-23", "2024-25"],
+          "scale": { "paddingInner": 0.2, "paddingOuter": 0.15 },
+          "axis": { "labelFontSize": 10, "labelAngle": -25, "labelPadding": 4 }
+        },
+        "y": {
+          "field": "Rank",
+          "type": "quantitative",
+          "title": null,
+          "scale": { "reverse": true, "domain": [0.5, 10.5], "nice": false },
+          "axis": {
+            "values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            "labelFontSize": 11,
+            "tickCount": 10
+          }
+        },
+        "color": {
+          "field": "Country",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "India", "China", "Philippines", "Nepal", "New Zealand",
+              "UK", "Sri Lanka", "Vietnam", "Pakistan", "Indonesia"
+            ],
+            "range": [
+              "#1a365d", "#234e7a", "#2c6091", "#3572a8", "#3f84bf",
+              "#4a96d6", "#5aa3dc", "#6ab0e2", "#7abde8", "#8acaee"
+            ]
+          }
+        },
+        "order": { "field": "Country" }
+      }
+    },
+    {
+      "mark": { "type": "point", "filled": true, "size": 50 },
+      "encoding": {
+        "x": {
+          "field": "Period",
+          "type": "ordinal",
+          "sort": ["2014-15", "2016-17", "2018-19", "2020-21", "2022-23", "2024-25"],
+          "scale": { "paddingInner": 0.2, "paddingOuter": 0.15 }
+        },
+        "y": {
+          "field": "Rank",
+          "type": "quantitative",
+          "scale": { "reverse": true, "domain": [0.5, 10.5] }
+        },
+        "color": {
+          "field": "Country",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "India", "China", "Philippines", "Nepal", "New Zealand",
+              "UK", "Sri Lanka", "Vietnam", "Pakistan", "Indonesia"
+            ],
+            "range": [
+              "#1a365d", "#234e7a", "#2c6091", "#3572a8", "#3f84bf",
+              "#4a96d6", "#5aa3dc", "#6ab0e2", "#7abde8", "#8acaee"
+            ]
+          }
+        },
+        "tooltip": [
+          { "field": "Country", "title": "Country" },
+          { "field": "Period", "title": "Period" },
+          { "field": "Rank", "title": "Rank" },
+          { "field": "Migrants", "title": "Migrants", "format": ",.0f" }
+        ]
+      }
+    },
+    {
+      "transform": [{ "filter": "datum.Period == '2024-25'" }],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 10,
+        "fontSize": 10,
+        "font": "Georgia, serif",
+        "color": "#1a1a1a"
+      },
+      "encoding": {
+        "x": {
+          "field": "Period",
+          "type": "ordinal",
+          "sort": ["2014-15", "2016-17", "2018-19", "2020-21", "2022-23", "2024-25"],
+          "scale": { "paddingInner": 0.2, "paddingOuter": 0.15 }
+        },
+        "y": {
+          "field": "Rank",
+          "type": "quantitative",
+          "scale": { "reverse": true, "domain": [0.5, 10.5] }
+        },
+        "text": { "field": "Country" }
+      }
+    }
+  ],
+
+  "config": {
+    "view": { "stroke": null },
+    "axis": { "grid": true, "gridOpacity": 0.15 }
+  }
+}
