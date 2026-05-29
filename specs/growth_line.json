@@ -4,7 +4,7 @@
   "width": "container",
   "height": 400,
 
-  "padding": { "left": 12, "top": 38, "right": 12, "bottom": 8 },
+  "padding": { "left": 12, "top": 6, "right": 12, "bottom": 8 },
 
   "autosize": {
     "type": "pad",
@@ -17,7 +17,7 @@
     "fontSize": 16,
     "fontWeight": "bold",
     "anchor": "start",
-    "offset": 8,
+    "offset": 40,
     "lineBreak": " ",
     "limit": 260
   },
@@ -42,62 +42,105 @@
     { "calculate": "substring(datum.Quarter, 0, 4)", "as": "Year" }
   ],
 
-  "mark": {
-    "type": "line",
-    "point": { "filled": true, "size": 60 },
-    "strokeWidth": 2.5
-  },
-
-  "encoding": {
-    "x": {
-      "field": "Year",
-      "type": "ordinal",
-      "title": null,
-      "scale": {
-        "domain": ["2014", "2016", "2018", "2020", "2022", "2024", "2025"],
-        "paddingInner": 0,
-        "paddingOuter": 0
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "point": { "filled": true, "size": 60 },
+        "strokeWidth": 2.5
       },
-      "axis": {
-        "labelFontSize": 13,
-        "labelAngle": 0
+      "encoding": {
+        "x": {
+          "field": "Year",
+          "type": "ordinal",
+          "title": null,
+          "scale": {
+            "domain": ["2014", "2016", "2018", "2020", "2022", "2024", "2025"],
+            "paddingInner": 0,
+            "paddingOuter": 0
+          },
+          "axis": {
+            "labelFontSize": 13,
+            "labelColor": "#333333",
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "Population",
+          "type": "quantitative",
+          "title": "Population",
+          "scale": { "domain": [0, 10000000] },
+          "axis": {
+            "format": "~s",
+            "labelFontSize": 13,
+            "labelColor": "#333333",
+            "titleFontSize": 15,
+            "titleFontWeight": 600,
+            "titleColor": "#1a1a1a",
+            "tickCount": 6
+          }
+        },
+        "color": {
+          "field": "StateAbbr",
+          "type": "nominal",
+          "title": null,
+          "scale": {
+            "domain": ["NSW", "VIC", "QLD", "WA", "SA"],
+            "range": ["#0B2545", "#0F766E", "#2563EB", "#C2410C", "#6D5A7A"]
+          },
+          "legend": {
+            "orient": "top",
+            "direction": "horizontal",
+            "offset": 4,
+            "labelFontSize": 13,
+            "labelOffset": 6,
+            "columnPadding": 22,
+            "symbolSize": 90,
+            "symbolStrokeWidth": 2
+          }
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.StateAbbr === 'NSW'",
+            "value": 1
+          },
+          "value": 0.38
+        },
+        "strokeWidth": {
+          "condition": {
+            "test": "datum.StateAbbr === 'NSW'",
+            "value": 3
+          },
+          "value": 1.75
+        },
+        "tooltip": [
+          { "field": "State", "title": "State" },
+          { "field": "Year", "title": "Year" },
+          { "field": "Population", "title": "Population", "format": ",.0f" }
+        ]
       }
     },
-    "y": {
-      "field": "Population",
-      "type": "quantitative",
-      "title": "Population",
-      "scale": { "domain": [0, 10000000] },
-      "axis": {
-        "format": "~s",
-        "labelFontSize": 13,
-        "tickCount": 6
-      }
-    },
-    "color": {
-      "field": "StateAbbr",
-      "type": "nominal",
-      "title": null,
-      "scale": {
-        "domain": ["NSW", "VIC", "QLD", "WA", "SA"],
-        "range": ["#1a365d", "#2b6cb0", "#3182ce", "#63b3ed", "#90cdf4"]
+    {
+      "transform": [
+        { "filter": "datum.StateAbbr === 'NSW' && datum.Year === '2025'" }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "bottom",
+        "dx": 8,
+        "dy": -8,
+        "fontSize": 10,
+        "font": "Georgia, serif",
+        "color": "#333333"
       },
-      "legend": {
-        "orient": "top",
-        "direction": "horizontal",
-        "offset": 0,
-        "labelFontSize": 12,
-        "symbolSize": 80,
-        "symbolStrokeWidth": 2
+      "encoding": {
+        "x": { "field": "Year", "type": "ordinal" },
+        "y": { "field": "Population", "type": "quantitative" },
+        "text": { "value": "Still largest — 8.6M" }
       }
-    },
-    "opacity": { "value": 1 },
-    "tooltip": [
-      { "field": "State", "title": "State" },
-      { "field": "Year", "title": "Year" },
-      { "field": "Population", "title": "Population", "format": ",.0f" }
-    ]
-  },
+    }
+  ],
 
   "config": {
     "mark": {

@@ -13,15 +13,13 @@
   },
 
   "title": {
-    "text": [
-      "7. What Type of Migration Shapes",
-      "Australia? (2024–25)"
-    ],
+    "text": "7. What Type of Migration Shapes Australia? (2024–25)",
     "fontSize": 16,
     "fontWeight": "bold",
     "anchor": "start",
     "offset": 8,
-    "lineHeight": 20
+    "lineBreak": " ",
+    "limit": 260
   },
 
   "data": {
@@ -64,7 +62,12 @@
           "field": "Period",
           "type": "nominal",
           "title": null,
-          "axis": { "labels": false, "ticks": false }
+          "axis": {
+            "labels": false,
+            "ticks": false,
+            "domainColor": "#1a1a1a",
+            "domainWidth": 1.5
+          }
         },
         "y": {
           "field": "Migrants",
@@ -73,8 +76,12 @@
           "stack": "zero",
           "axis": {
             "format": "~s",
-            "labelFontSize": 11,
-            "tickCount": 5
+            "labelFontSize": 12,
+            "labelColor": "#333333",
+            "tickCount": 5,
+            "domainColor": "#1a1a1a",
+            "domainWidth": 1.5,
+            "tickColor": "#666666"
           }
         },
         "color": {
@@ -88,16 +95,20 @@
               "Child stream",
               "Special Eligibility"
             ],
-            "range": ["#1a365d", "#3d7ab8", "#7eb3e8", "#c5dff5"]
+            "range": ["#0B2545", "#1F6F62", "#B45309", "#6D5A7A"]
           },
           "legend": {
-            "orient": "right",
-            "offset": 0,
-            "labelFontSize": 9,
-            "symbolSize": 65,
+            "orient": "none",
+            "direction": "vertical",
+            "legendX": { "expr": "width - 62" },
+            "legendY": { "expr": "height / 2 - 45" },
+            "labelFontSize": 12,
+            "labelOffset": 4,
+            "rowPadding": 9,
+            "symbolSize": 90,
             "columns": 1,
             "title": null,
-            "labelLimit": 90
+            "labelLimit": 110
           }
         },
         "order": {
@@ -119,8 +130,8 @@
       "mark": {
         "type": "text",
         "fill": "#ffffff",
-        "fontSize": 10,
-        "fontWeight": "bold",
+        "fontSize": 9,
+        "fontWeight": 500,
         "font": "Georgia, serif"
       },
       "encoding": {

@@ -37,7 +37,7 @@
 
   "layer": [
     {
-      "mark": { "type": "rule", "color": "#c8c8c8", "strokeWidth": 1 },
+      "mark": { "type": "rule", "color": "#b3b3b3", "strokeWidth": 1.2 },
       "encoding": {
         "y": {
           "field": "Country",
@@ -45,10 +45,14 @@
           "title": null,
           "sort": "-x",
           "axis": {
-            "labelFontSize": 11,
+            "labelFontSize": 12,
+            "labelColor": "#2a2a2a",
             "labelLimit": 100,
             "labelPadding": 6,
-            "offset": 4
+            "offset": 4,
+            "domainColor": "#1a1a1a",
+            "domainWidth": 1.5,
+            "tickColor": "#666666"
           }
         },
         "x": {
@@ -56,20 +60,93 @@
           "type": "quantitative",
           "title": "Migrants",
           "scale": { "nice": true, "zero": true },
-          "axis": { "format": "~s", "labelFontSize": 11, "tickCount": 6 }
+          "axis": {
+            "format": "~s",
+            "labelFontSize": 12,
+            "labelColor": "#333333",
+            "tickCount": 6,
+            "titleFontSize": 14,
+            "titleFontWeight": 600,
+            "titleColor": "#1a1a1a",
+            "domainColor": "#1a1a1a",
+            "domainWidth": 1.5,
+            "tickColor": "#666666"
+          }
         },
         "x2": { "value": 0 }
       }
     },
     {
-      "mark": { "type": "point", "filled": true, "color": "#1a365d", "size": 90 },
+      "mark": { "type": "point", "filled": true, "size": 90 },
       "encoding": {
         "y": { "field": "Country", "type": "nominal", "sort": "-x" },
         "x": { "field": "Migrants", "type": "quantitative" },
+        "opacity": {
+          "condition": {
+            "test": "datum.Country === 'India'",
+            "value": 1
+          },
+          "value": 0.72
+        },
+        "size": {
+          "condition": {
+            "test": "datum.Country === 'India'",
+            "value": 110
+          },
+          "value": 80
+        },
+        "color": {
+          "field": "Country",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "India",
+              "Philippines",
+              "Nepal",
+              "China",
+              "Vietnam",
+              "Pakistan",
+              "New Zealand",
+              "Indonesia",
+              "UK",
+              "Sri Lanka"
+            ],
+            "range": [
+              "#16395B",
+              "#275A78",
+              "#37708B",
+              "#4A7E96",
+              "#5C8AA1",
+              "#6D96AB",
+              "#7CA1B4",
+              "#8AABBC",
+              "#98B5C4",
+              "#A6BFCC"
+            ]
+          }
+        },
         "tooltip": [
           { "field": "Country", "title": "Country" },
           { "field": "Migrants", "title": "Migrants", "format": ",.0f" }
         ]
+      }
+    },
+    {
+      "transform": [{ "filter": "datum.Country === 'India'" }],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 10,
+        "fontSize": 10,
+        "font": "Georgia, serif",
+        "color": "#333333"
+      },
+      "encoding": {
+        "y": { "field": "Country", "type": "nominal", "sort": "-x" },
+        "x": { "field": "Migrants", "type": "quantitative" },
+        "text": { "value": "Leading source — 56K arrivals" }
       }
     }
   ],

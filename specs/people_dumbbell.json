@@ -4,7 +4,7 @@
   "width": "container",
   "height": 380,
 
-  "padding": { "left": 18, "top": 38, "right": 20, "bottom": 10 },
+  "padding": { "left": 22, "top": 48, "right": 36, "bottom": 10 },
 
   "autosize": {
     "type": "fit",
@@ -13,15 +13,13 @@
   },
 
   "title": {
-    "text": [
-      "9. Are Capital Cities Growing Faster",
-      "Than Regional Areas? (2014 vs 2025)"
-    ],
+    "text": "9. Are Capital Cities Growing Faster Than Regional Areas? (2014 vs 2025)",
     "fontSize": 16,
     "fontWeight": "bold",
     "anchor": "start",
     "offset": 8,
-    "lineHeight": 20
+    "lineBreak": " ",
+    "limit": 320
   },
 
   "data": {
@@ -33,7 +31,7 @@
     { "calculate": "toNumber(datum.Pop2014)", "as": "Pop2014" },
     { "calculate": "toNumber(datum.Pop2025)", "as": "Pop2025" },
     {
-      "calculate": "datum.Region == 'Greater Sydney' ? 'Sydney' : datum.Region == 'Rest of NSW' ? 'Regional NSW' : datum.Region == 'Greater Melbourne' ? 'Melbourne' : 'Regional VIC'",
+      "calculate": "datum.Region == 'Greater Sydney' ? 'Sydney' : datum.Region == 'Rest of NSW' ? 'Regional NSW' : datum.Region == 'Greater Melbourne' ? 'Melbourne' : datum.Region == 'Rest of Victoria' ? 'Regional VIC' : datum.Region",
       "as": "RegionLabel"
     }
   ],
@@ -43,28 +41,16 @@
       "field": "RegionLabel",
       "type": "nominal",
       "title": null,
-      "sort": ["Sydney", "Regional NSW", "Melbourne", "Regional VIC"],
-      "axis": {
-        "labelFontSize": 10,
-        "labelColor": "#333333",
-        "labelPadding": 10,
-        "offset": 10
-      }
-    },
-    "x": {
-      "type": "quantitative",
-      "title": "Population (millions)",
       "scale": {
-        "domain": [1320000, 5480000],
-        "nice": false,
-        "padding": 0.04
+        "domain": ["Sydney", "Regional NSW", "Melbourne", "Regional VIC"],
+        "paddingInner": 0.15,
+        "paddingOuter": 0.08
       },
       "axis": {
-        "labelExpr": "datum.value >= 1e6 ? format(datum.value/1e6, '.0f') + 'M' : format(datum.value/1e3, '.0f') + 'k'",
-        "labelFontSize": 10,
-        "labelColor": "#333333",
-        "titleColor": "#333333",
-        "tickCount": 5
+        "labelFontSize": 13,
+        "labelFontWeight": 600,
+        "labelColor": "#2a2a2a",
+        "labelPadding": 8
       }
     }
   },
@@ -73,18 +59,27 @@
     {
       "mark": { "type": "rule", "color": "#5f5f5f", "strokeWidth": 1.25 },
       "encoding": {
-        "x": { "field": "Pop2014" },
-        "x2": { "field": "Pop2025" }
+        "y": { "field": "RegionLabel", "type": "nominal" },
+        "x": {
+          "field": "Pop2014",
+          "type": "quantitative",
+          "scale": {
+            "domain": [1320000, 5480000],
+            "nice": false,
+            "padding": 0.1
+          }
+        },
+        "x2": { "field": "Pop2025", "type": "quantitative" }
       }
     },
     {
       "transform": [
-        { "fold": ["Pop2014", "Pop2025"] },
+        { "fold": ["Pop2014", "Pop2025"], "as": ["YearKey", "Population"] },
         {
-          "calculate": "datum.key == 'Pop2014' ? '2014' : '2025'",
+          "calculate": "datum.YearKey == 'Pop2014' ? '2014' : '2025'",
           "as": "Year"
         },
-        { "calculate": "toNumber(datum.value)", "as": "Population" }
+        { "calculate": "toNumber(datum.Population)", "as": "Population" }
       ],
       "mark": {
         "type": "point",
@@ -97,20 +92,42 @@
         }
       },
       "encoding": {
-        "x": { "field": "Population" },
+        "y": { "field": "RegionLabel", "type": "nominal" },
+        "x": {
+          "field": "Population",
+          "type": "quantitative",
+          "title": "Population (millions)",
+          "scale": {
+            "domain": [1320000, 5480000],
+            "nice": false,
+            "padding": 0.1
+          },
+          "axis": {
+            "labelExpr": "datum.value >= 1e6 ? format(datum.value/1e6, '.0f') + 'M' : format(datum.value/1e3, '.0f') + 'k'",
+            "labelFontSize": 12,
+            "labelFontWeight": 600,
+            "labelColor": "#333333",
+            "titleFontSize": 13,
+            "titleFontWeight": 600,
+            "titleColor": "#1a1a1a",
+            "titlePadding": 10,
+            "tickCount": 5
+          }
+        },
         "color": {
           "field": "Year",
           "type": "nominal",
           "legend": {
-            "orient": "top-right",
+            "orient": "top",
             "direction": "horizontal",
             "title": null,
-            "labelFontSize": 9,
-            "symbolSize": 48,
+            "labelFontSize": 12,
+            "symbolSize": 64,
             "symbolStrokeWidth": 1.5,
-            "offset": -10,
-            "padding": 4,
-            "columnPadding": 10
+            "offset": 6,
+            "padding": 12,
+            "labelOffset": 6,
+            "columnPadding": 20
           },
           "scale": {
             "domain": ["2014", "2025"],
@@ -126,6 +143,10 @@
     }
   ],
 
+  "resolve": {
+    "scale": { "x": "shared", "y": "shared" }
+  },
+
   "config": {
     "view": { "stroke": null },
     "axis": {
@@ -135,8 +156,11 @@
       "gridOpacity": 0.15
     },
     "legend": {
-      "orient": "top-right",
-      "direction": "horizontal"
+      "orient": "top",
+      "direction": "horizontal",
+      "offset": 4,
+      "padding": 10,
+      "labelOffset": 4
     }
   }
 }

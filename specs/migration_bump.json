@@ -4,7 +4,7 @@
   "width": "container",
   "height": 400,
 
-  "padding": { "left": 10, "top": 38, "right": 118, "bottom": 28 },
+  "padding": { "left": 10, "top": 38, "right": 84, "bottom": 28 },
 
   "autosize": {
     "type": "fit",
@@ -13,15 +13,13 @@
   },
 
   "title": {
-    "text": [
-      "6. How Have Migration Sources",
-      "Changed Over Time?"
-    ],
+    "text": "6. How Have Migration Sources Changed Over Time?",
     "fontSize": 16,
     "fontWeight": "bold",
     "anchor": "start",
     "offset": 8,
-    "lineHeight": 20
+    "lineBreak": " ",
+    "limit": 260
   },
 
   "data": {
@@ -54,8 +52,16 @@
           "type": "ordinal",
           "title": null,
           "sort": ["2014-15", "2016-17", "2018-19", "2020-21", "2022-23", "2024-25"],
-          "scale": { "paddingInner": 0.2, "paddingOuter": 0.15 },
-          "axis": { "labelFontSize": 10, "labelAngle": -25, "labelPadding": 4 }
+          "scale": { "paddingInner": 0.2, "paddingOuter": 0.08 },
+          "axis": {
+            "labelFontSize": 12,
+            "labelColor": "#333333",
+            "labelAngle": -25,
+            "labelPadding": 4,
+            "domainColor": "#1a1a1a",
+            "domainWidth": 1.5,
+            "tickColor": "#666666"
+          }
         },
         "y": {
           "field": "Rank",
@@ -64,8 +70,12 @@
           "scale": { "reverse": true, "domain": [0.5, 10.5], "nice": false },
           "axis": {
             "values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            "labelFontSize": 11,
-            "tickCount": 10
+            "labelFontSize": 12,
+            "labelColor": "#333333",
+            "tickCount": 10,
+            "domainColor": "#1a1a1a",
+            "domainWidth": 1.5,
+            "tickColor": "#666666"
           }
         },
         "color": {
@@ -78,8 +88,16 @@
               "UK", "Sri Lanka", "Vietnam", "Pakistan", "Indonesia"
             ],
             "range": [
-              "#1a365d", "#234e7a", "#2c6091", "#3572a8", "#3f84bf",
-              "#4a96d6", "#5aa3dc", "#6ab0e2", "#7abde8", "#8acaee"
+              "#1A4568",
+              "#5C6370",
+              "#2D6A6E",
+              "#4A7C59",
+              "#8B7355",
+              "#4A5568",
+              "#9A8060",
+              "#3D5A80",
+              "#7A8490",
+              "#B87D5F"
             ]
           }
         },
@@ -93,7 +111,7 @@
           "field": "Period",
           "type": "ordinal",
           "sort": ["2014-15", "2016-17", "2018-19", "2020-21", "2022-23", "2024-25"],
-          "scale": { "paddingInner": 0.2, "paddingOuter": 0.15 }
+          "scale": { "paddingInner": 0.2, "paddingOuter": 0.08 }
         },
         "y": {
           "field": "Rank",
@@ -110,8 +128,16 @@
               "UK", "Sri Lanka", "Vietnam", "Pakistan", "Indonesia"
             ],
             "range": [
-              "#1a365d", "#234e7a", "#2c6091", "#3572a8", "#3f84bf",
-              "#4a96d6", "#5aa3dc", "#6ab0e2", "#7abde8", "#8acaee"
+              "#1A4568",
+              "#5C6370",
+              "#2D6A6E",
+              "#4A7C59",
+              "#8B7355",
+              "#4A5568",
+              "#9A8060",
+              "#3D5A80",
+              "#7A8490",
+              "#B87D5F"
             ]
           }
         },
@@ -130,7 +156,43 @@
         "align": "left",
         "baseline": "middle",
         "dx": 10,
-        "fontSize": 10,
+        "fontSize": 9,
+        "font": "Georgia, serif",
+        "fontWeight": "normal",
+        "color": "#5a5a5a"
+      },
+      "encoding": {
+        "x": {
+          "field": "Period",
+          "type": "ordinal",
+          "sort": ["2014-15", "2016-17", "2018-19", "2020-21", "2022-23", "2024-25"],
+          "scale": { "paddingInner": 0.2, "paddingOuter": 0.08 }
+        },
+        "y": {
+          "field": "Rank",
+          "type": "quantitative",
+          "scale": { "reverse": true, "domain": [0.5, 10.5] }
+        },
+        "text": { "field": "Country" }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "Period": "2024-25",
+            "Rank": 1,
+            "text": "India climbs to the top source"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "bottom",
+        "dx": -10,
+        "dy": -8,
+        "fontStyle": "italic",
         "font": "Georgia, serif",
         "color": "#1a1a1a"
       },
@@ -139,14 +201,14 @@
           "field": "Period",
           "type": "ordinal",
           "sort": ["2014-15", "2016-17", "2018-19", "2020-21", "2022-23", "2024-25"],
-          "scale": { "paddingInner": 0.2, "paddingOuter": 0.15 }
+          "scale": { "paddingInner": 0.2, "paddingOuter": 0.08 }
         },
         "y": {
           "field": "Rank",
           "type": "quantitative",
           "scale": { "reverse": true, "domain": [0.5, 10.5] }
         },
-        "text": { "field": "Country" }
+        "text": { "field": "text" }
       }
     }
   ],

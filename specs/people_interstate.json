@@ -4,7 +4,7 @@
   "width": "container",
   "height": 380,
 
-  "padding": { "left": 4, "top": 38, "right": 52, "bottom": 10 },
+  "padding": { "left": 56, "top": 38, "right": 56, "bottom": 10 },
 
   "autosize": {
     "type": "fit",
@@ -13,15 +13,13 @@
   },
 
   "title": {
-    "text": [
-      "10. Interstate Migration — Winners",
-      "& Losers (2024–25)"
-    ],
+    "text": "10. Interstate Migration — Winners & Losers (2024–25)",
     "fontSize": 16,
     "fontWeight": "bold",
     "anchor": "start",
     "offset": 8,
-    "lineHeight": 20
+    "lineBreak": " ",
+    "limit": 320
   },
 
   "data": {
@@ -46,10 +44,6 @@
       "as": "StateShort"
     },
     {
-      "calculate": "(datum.Migration < 0 ? '' : '+') + format(datum.Migration/1000, '.1f') + 'K'",
-      "as": "Label"
-    },
-    {
       "calculate": "datum.Migration >= 0 ? 'gain' : 'loss'",
       "as": "Direction"
     },
@@ -66,13 +60,19 @@
       "type": "nominal",
       "title": null,
       "sort": { "field": "Rank", "order": "ascending" },
+      "scale": {
+        "paddingInner": 0.2,
+        "paddingOuter": 0.12
+      },
       "axis": {
-        "labelFontSize": 10,
-        "labelColor": "#333333",
-        "labelPadding": 4,
-        "offset": 8,
+        "labelFontSize": 12,
+        "labelFontWeight": 600,
+        "labelColor": "#2a2a2a",
+        "labelPadding": 8,
+        "offset": 4,
         "labelAlign": "right",
-        "labelBound": true
+        "labelBound": true,
+        "ticks": false
       }
     },
     "x": {
@@ -80,16 +80,25 @@
       "type": "quantitative",
       "title": "Net interstate migration",
       "scale": {
-        "domain": [-30000, 30000],
+        "domain": [-35000, 35000],
         "nice": false,
         "zero": true
       },
       "axis": {
         "labelExpr": "format(datum.value/1000, '.0f') + 'K'",
-        "labelFontSize": 10,
+        "labelFontSize": 12,
+        "labelFontWeight": 600,
         "labelColor": "#333333",
-        "titleColor": "#333333",
-        "values": [-30000, -20000, -10000, 0, 10000, 20000]
+        "titleFontSize": 13,
+        "titleFontWeight": 600,
+        "titleColor": "#1a1a1a",
+        "values": [-30000, -20000, -10000, 0, 10000, 20000],
+        "grid": {
+          "condition": { "test": "datum.value === 0", "value": false },
+          "value": true
+        },
+        "gridOpacity": 0.1,
+        "gridColor": "#d8d8d8"
       }
     },
     "color": {
@@ -98,7 +107,7 @@
       "legend": null,
       "scale": {
         "domain": ["gain", "loss"],
-        "range": ["#4f7d5c", "#b04e4e"]
+        "range": ["#23563a", "#822a2a"]
       }
     },
     "tooltip": [
@@ -109,39 +118,83 @@
 
   "layer": [
     {
-      "mark": { "type": "bar", "size": 16, "cornerRadiusEnd": 2 }
+      "mark": { "type": "bar", "size": 12 },
+      "encoding": {
+        "x2": { "value": 0 },
+        "opacity": {
+          "condition": {
+            "test": "datum.StateShort === 'QLD' || datum.StateShort === 'NSW'",
+            "value": 1
+          },
+          "value": 0.78
+        },
+        "color": {
+          "field": "Direction",
+          "type": "nominal",
+          "scale": {
+            "domain": ["gain", "loss"],
+            "range": ["#23563a", "#822a2a"]
+          }
+        }
+      }
     },
     {
+      "transform": [{ "filter": "datum.StateShort === 'QLD'" }],
       "mark": {
         "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 8,
         "fontSize": 10,
         "font": "Georgia, serif",
-        "color": "#2a2a2a",
-        "align": "left",
-        "dx": 10,
-        "baseline": "middle"
+        "color": "#333333"
       },
       "encoding": {
-        "text": { "field": "Label" },
-        "x": { "field": "Migration" }
-      },
-      "transform": [{ "filter": "datum.Migration >= 0" }]
+        "y": {
+          "field": "StateShort",
+          "type": "nominal",
+          "sort": { "field": "Rank", "order": "ascending" }
+        },
+        "x": { "field": "Migration", "type": "quantitative" },
+        "text": { "value": "Strongest net gain (+25K)" }
+      }
     },
     {
+      "transform": [
+        {
+          "window": [
+            {
+              "op": "rank",
+              "as": "yOrder",
+              "sort": [{ "field": "Rank", "order": "ascending" }]
+            }
+          ]
+        },
+        {
+          "joinaggregate": [
+            { "op": "min", "field": "yOrder", "as": "yMin" },
+            { "op": "max", "field": "yOrder", "as": "yMax" }
+          ]
+        },
+        {
+          "filter": "datum.yOrder == datum.yMin || datum.yOrder == datum.yMax"
+        }
+      ],
       "mark": {
-        "type": "text",
-        "fontSize": 10,
-        "font": "Georgia, serif",
-        "color": "#2a2a2a",
-        "align": "left",
-        "dx": 12,
-        "baseline": "middle"
+        "type": "line",
+        "stroke": "#000000",
+        "strokeWidth": 3,
+        "opacity": 1
       },
       "encoding": {
-        "text": { "field": "Label" },
-        "x": { "field": "Migration" }
-      },
-      "transform": [{ "filter": "datum.Migration < 0" }]
+        "x": { "datum": 0, "type": "quantitative" },
+        "y": {
+          "field": "StateShort",
+          "type": "nominal",
+          "sort": { "field": "Rank", "order": "ascending" }
+        },
+        "order": { "field": "yOrder" }
+      }
     }
   ],
 

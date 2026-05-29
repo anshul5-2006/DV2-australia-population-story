@@ -4,10 +4,10 @@
   "width": "container",
   "height": 400,
 
-  "padding": { "left": 8, "top": 38, "right": 8, "bottom": 52 },
+  "padding": { "left": 5, "top": 24, "right": 5, "bottom": 62 },
 
   "autosize": {
-    "type": "pad",
+    "type": "fit",
     "contains": "padding",
     "resize": false
   },
@@ -17,7 +17,7 @@
     "fontSize": 16,
     "fontWeight": "bold",
     "anchor": "start",
-    "offset": 8,
+    "offset": 22,
     "lineBreak": " ",
     "limit": 260
   },
@@ -63,15 +63,22 @@
       "type": "quantitative",
       "title": "Population",
       "scale": {
-        "scheme": "blues"
+        "scheme": "blues",
+        "domain": [250000, 8500000]
       },
       "legend": {
         "orient": "bottom",
         "direction": "horizontal",
-        "gradientLength": 200,
+        "gradientLength": 280,
         "title": "Population",
-        "format": ",.0f",
-        "offset": 6
+        "values": [2000000, 4000000, 6000000, 8000000],
+        "format": "~s",
+        "labelFontSize": 13,
+        "titleFontSize": 14,
+        "titlePadding": 12,
+        "labelOverlap": false,
+        "offset": 10,
+        "padding": 2
       }
     },
     "tooltip": [
@@ -82,7 +89,7 @@
 
   "projection": {
     "type": "mercator",
-    "center": [134, -28],
-    "scale": 780
+    "center": [134, -27.1],
+    "scale": 700
   }
 }
